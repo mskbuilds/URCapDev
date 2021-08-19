@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1629228038832
+Build-Jdk: 1.8.0_292
+Built-By: sarvesh
+Bundle-Activator: com.fzi.externalcontrol.impl.Activator
+Bundle-Category: URCap
+Bundle-ContactAddress: Haid-und-Neu-Straße 10-14, 76131 Karlsruhe
+Bundle-Copyright: Copyright (C) 2021 FZI Research Center for Information
+  Technology
+Bundle-Description: URcap which enables external control
+Bundle-LicenseType: Apache License, Version 2.0
+Bundle-ManifestVersion: 2
+Bundle-Name: External Control
+Bundle-SymbolicName: com.fzi.externalcontrol
+Bundle-Vendor: FZI Research Center for Information Technology
+Bundle-Version: 1.0.5
+Created-By: Apache Maven Bundle Plugin
+Import-Package: com.ur.urcap.api.contribution;version="[1.4.0,2.0.0)",co
+ m.ur.urcap.api.contribution.installation;version="[1.4.0,2.0.0)",com.ur
+ .urcap.api.contribution.installation.swing;version="[1.4.0,2.0.0)",com.
+ ur.urcap.api.contribution.program;version="[1.4.0,2.0.0)",com.ur.urcap.
+ api.contribution.program.swing;version="[1.4.0,2.0.0)",com.ur.urcap.api
+ .domain;version="[1.4.0,2.0.0)",com.ur.urcap.api.domain.data;version="[
+ 1.4.0,2.0.0)",com.ur.urcap.api.domain.script;version="[1.4.0,2.0.0)",co
+ m.ur.urcap.api.domain.undoredo;version="[1.4.0,2.0.0)",com.ur.urcap.api
+ .domain.userinteraction;version="[1.4.0,2.0.0)",com.ur.urcap.api.domain
+ .userinteraction.keyboard;version="[1.4.0,2.0.0)",javax.swing,javax.swi
+ ng.border,javax.swing.event,javax.swing.table,org.osgi.framework;versio
+ n="[1.6,2)"
+Tool: Bnd-2.1.0.20130426-122213
