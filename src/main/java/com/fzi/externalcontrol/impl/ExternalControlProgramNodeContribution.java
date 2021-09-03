@@ -50,6 +50,15 @@ public class ExternalControlProgramNodeContribution implements ProgramNodeContri
   private final KeyboardInputFactory keyboardFactory;
   private final UndoRedoManager undoRedoManager;
 
+  private static final String MASTER_KEY = "MASTER";
+  private static final String MASTER_NAME_KEY = "MASTER_NAME";
+  private static final String PORT_KEY = "PORT";
+
+
+  private static final String DEFAULT_MASTER = "";
+  private static final String DEFAULT_MASTER_NAME = "";
+  private static final String DEFAULT_PORT = "";
+
   public ExternalControlProgramNodeContribution(
       ProgramAPIProvider apiProvider, ExternalControlProgramNodeView view, DataModel model) {
     this.programAPI = apiProvider.getProgramAPI();
@@ -62,7 +71,7 @@ public class ExternalControlProgramNodeContribution implements ProgramNodeContri
 
   @Override
   public void openView() {
-    view.updateInfoLabel(getInstallation().getHostIP(), getInstallation().getCustomPort());
+    view.updateInfoLabel(getMasterIP(), getMasterPort());
   }
 
   @Override
@@ -79,13 +88,13 @@ public class ExternalControlProgramNodeContribution implements ProgramNodeContri
   }
 
   @Override
-  public void generateScript(ScriptWriter writer) {
+  public void generateScript (ScriptWriter writer) {
     String controlLoop = getInstallation().getControlLoop(writer);
     writer.appendRaw(controlLoop);
   }
 
-  private ExternalControlInstallationNodeContribution getInstallation() {
-    return programAPI.getInstallationNode(ExternalControlInstallationNodeContribution.class);
+  private RosbridgeInstallationNodeContribution getInstallation() {
+    return programAPI.getInstallationNode(RosbridgeInstallationNodeContribution.class);
   }
 
   public void setParam(final String key, final String value, final String default_val) {
@@ -165,4 +174,65 @@ public class ExternalControlProgramNodeContribution implements ProgramNodeContri
       }
     };
   }
+
+  public void onMasterSelection(final String selected_master) {
+    System.out.println("### onMasterSelection");
+    final MasterPair master = MasterPair.fromString(selected_master);
+    if (getMasterIP().equals(master.getIp())
+        && getMasterPort().equals(master.getPort())) { // no changes
+      return;
+    }
+    System.out.println("Set model master to " + master.toString());
+    undoRedoManager.recordChanges(new UndoableChanges() {
+      @Override
+      public void executeChanges() {
+        model.set(MASTER_NAME_KEY, master.getName());
+        model.set(MASTER_KEY, master.getIp());
+        model.set(PORT_KEY, master.getPort());
+      }
+    });
+  }
+
+    protected String getMasterIP() {
+    return model.get(MASTER_KEY, DEFAULT_MASTER);
+  }
+
+  protected String getMasterPort() {
+    return model.get(PORT_KEY, DEFAULT_PORT);
+  }
+
+  // protected String[] queryMsgList() {
+  //   System.out.println("### getMsgList");
+  //   String[] items = new String[1];
+  //   items[0] = getMsg();
+
+  //   String request_string = getMsgListRequestString();
+
+  //   try {
+  //     // JSON parsing
+  //     JSONObject json_response = rosbridgeRequest(request_string);
+  //     if (json_response == null) {
+  //       throw new NullPointerException("Response null");
+  //     }
+  //     JSONArray msgs =
+  //         json_response.getJSONObject("values").getJSONArray(getMsgListResponsePlaceholder());
+  //     items = new String[msgs.length() + 1];
+  //     items[0] = " ";
+  //     for (int i = 0, l = msgs.length(); i < l; ++i) {
+  //       items[i + 1] = msgs.getString(i);
+  //     }
+  //   } catch (org.json.JSONException e) {
+  //     System.err.println("getMsgList: JSON-Error: " + e);
+  //   } catch (java.lang.Exception ex) {
+  //     System.err.println("getMsgList: Error: " + ex);
+  //   }
+
+  //   Arrays.sort(items);
+  //   return items;
+  // }
+
+  // protected String getMsg() {
+  //   return model.get(MSG_KEY, DEFAULT_MSG);
+  // }
+
 }

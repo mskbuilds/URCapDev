@@ -70,6 +70,7 @@ public class ExternalControlInstallationNodeContribution implements Installation
   @Override
   public void generateScript(ScriptWriter writer) {
     programRequested = false;
+
   }
 
   // IP helper functions
