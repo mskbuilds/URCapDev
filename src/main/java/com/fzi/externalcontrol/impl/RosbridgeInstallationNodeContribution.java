@@ -39,6 +39,15 @@ import java.util.stream.Collectors;
 public class RosbridgeInstallationNodeContribution implements InstallationNodeContribution {
   private static final String MASTERS_KEY = "rosbridge_masters";
   private static final String[] DEFAULT_MASTERS = {"default : 192.168.56.1 : 9090"};
+  private static final String DEFAULT_NAME = DEFAULT_MASTERS[0];
+  private static final String NAME = "name";
+  private static final String HOST_IP = "host_ip";
+  private static final String PORT_NR = "port_nr";
+  private static final String DEFAULT_PORT = "50002";
+
+  // private RequestProgram[] sender;
+  private RequestProgram sender; 
+
   private DataModel model;
   private final RosbridgeInstallationNodeView view;
   private boolean quote_queried = false;
@@ -191,5 +200,48 @@ public class RosbridgeInstallationNodeContribution implements InstallationNodeCo
       mastersStrings[i] = data[i].toString();
     }
     model.set(MASTERS_KEY, mastersStrings);
+  }
+
+  public String getName() {
+    return model.get(NAME, DEFAULT_NAME);
+  }
+
+  public String getControlLoop(ScriptWriter writer) {
+      // String[] masters = model.get(MASTERS_KEY, DEFAULT_MASTERS);
+      // MasterPair[] items = new MasterPair[masters.length];
+      // // MasterPair mp = data[0];
+      // for (int i = 0; i < masters.length; i++) {
+      //     System.out.println("Found master in model: " + masters[i]);
+      //     items[i] = mp.getIp();
+      // }
+      // if (sender[] == null){
+    // if (programRequested == false) {
+      // Request and split the program
+      // for(int i=0; i<DEFAULT_IP.length(); i++)
+      // {
+        sender = new RequestProgram(getMasterIP(), getCustomPort());
+        sender.requestAndSplitProgram();
+
+        // Append header to the ur program.
+        writer.appendRaw(sender.getHeader());
+      // }
+      // programRequested = true;
+    // }
+      // }
+    return sender.getControlLoop();
+  }
+
+  // public String getHostIP() {
+  //   String[] masterPair = model.get(Mas)
+  //   MasterPair[] ip = new MasterPair(ip);
+  //   return  model.get(HOST_IP, ip.getIp());
+  // }
+
+  protected String getMasterIP() {
+    return model.get(MASTER_KEY, DEFAULT_MASTER);
+  }
+
+  public String getCustomPort() {
+    return model.get(PORT_NR, DEFAULT_PORT);
   }
 }
